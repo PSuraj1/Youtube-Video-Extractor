@@ -1,0 +1,358 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const faqs = [
+  ['Is this free to use?', 'Yes. The tool is designed to keep simple media format extraction accessible without an account.'],
+  ['Do I need to create an account?', 'No account is needed to get started. Paste a supported link when you are ready.'],
+  ['Can I use YouTube Shorts links?', 'Yes. Standard YouTube video URLs and YouTube Shorts links are supported.'],
+  ['Where are my files saved?', 'Your browser normally saves files in its default downloads location, unless you choose another folder.'],
+  ['What is the best YouTube video downloader?', 'The best YouTube video downloader for your needs is one that clearly explains its options, supports the quality you need, and is used only for content you own or are authorized to save. Choose a simple tool that works in your browser and helps you distinguish between MP4 video and MP3 audio formats.'],
+  ['What is a safe YouTube video downloader?', 'A safe YouTube video downloader should be transparent about the formats it offers, avoid asking for unnecessary personal information, and never require you to install unknown software. Always respect copyright, creator permissions, YouTube terms, and local law when saving any media.'],
+  ['How do I download a video with a YouTube video downloader?', 'Start by copying a YouTube video or Shorts URL and pasting it into the extractor. When a permitted format is available, review the video or audio choices, select the quality that fits your needs, and follow the download step shown by the tool.'],
+  ['How does a YouTube video MP3 downloader work?', 'A YouTube video MP3 downloader checks a supported video link for an audio-only option. If you have permission to save the content, you can choose an MP3 format instead of a video format, which is useful when only the audio is needed.'],
+  ['What video downloader supports YouTube?', 'Look for a browser-based video downloader that specifically states it supports YouTube video URLs and YouTube Shorts links. A clear interface should identify available video and audio formats, while leaving you responsible for confirming that you have the right to download the material.'],
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map(([name, text]) => ({
+    '@type': 'Question',
+    name,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text,
+    },
+  })),
+};
+---
+
+<Layout title="YouTube Video Extractor - Free Online Video & MP3 Format Tool" description="Use our free online YouTube video extractor tool to paste a video or Shorts link, choose MP4 or MP3, and find your preferred quality." canonical="https://youtubevideoextractor.com/" lang="en">
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#home" aria-label="YouTube Video Extractor home"><span class="brand-mark"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8.5 6.7v10.6L17 12 8.5 6.7Z" /></svg></span><span>YouTube Video Extractor</span></a>
+      <nav class="desktop-nav" aria-label="Primary navigation"><a href="#home">Home</a><a href="#how-it-works">How it works</a><a href="#faq">FAQ</a></nav>
+      <button class="paste-link" type="button" data-paste-link>Paste Link</button>
+      <button class="menu-toggle" type="button" data-menu-toggle aria-label="Open navigation menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16" /></svg></button>
+    </div>
+    <nav class="mobile-menu" data-mobile-menu aria-label="Mobile navigation"><a href="#home">Home</a><a href="#how-it-works">How it works</a><a href="#faq">FAQ</a><button type="button" data-paste-link>Paste Link</button></nav>
+  </header>
+
+  <main id="home">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-inner">
+        <p class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="m13 2-9 12h7l-1 8 9-12h-7l1-8Z" /></svg>Fast &amp; Free</p>
+        <h1 id="hero-title">Extract YouTube Videos <span>in one click</span></h1>
+        <p class="hero-copy">Paste a YouTube video or Shorts link and choose your preferred format. No sign-up, no clutter.</p>
+        <div class="extractor-card">
+          <form class="extractor-form" data-extractor-form>
+            <label class="url-field"><span class="sr-only">YouTube URL</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7.07.07l2-2a5 5 0 0 0-7.07-7.07l-1.15 1.15" /><path d="M14 11a5 5 0 0 0-7.07-.07l-2 2A5 5 0 0 0 12 20l1.15-1.15" /></svg><input data-url-input type="url" inputmode="url" autocomplete="url" placeholder="Paste YouTube URL here..." /></label>
+            <button class="extract-button" type="submit">Extract</button>
+          </form>
+          <div class="extract-result" data-extract-result aria-live="polite"></div>
+        </div>
+        <p class="privacy-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" /><path d="m9 12 2 2 4-4" /></svg>We don't store your links or files.</p>
+        <div class="preview-stage" aria-label="Video extractor preview">
+          <span class="format-badge video-badge">MP4 1080p</span>
+          <div class="video-window"><div class="window-bar"><i></i><i></i><i></i></div><div class="video-content"><div class="thumbnail"><button class="play-control" type="button" aria-label="Preview video"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8.5 6.7v10.6L17 12 8.5 6.7Z" /></svg></button></div><div class="preview-info"><p>Ready to extract</p><h2>Your video, your format.</h2><span></span><span></span><span></span></div></div></div>
+          <span class="format-badge audio-badge">MP3 320kbps</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="how-it-works" aria-labelledby="how-title">
+      <div class="section-heading"><h2 id="how-title">How it works</h2><p>Three simple steps. No installs, no accounts.</p></div>
+      <div class="steps-grid">
+        <article class="step-card"><div class="step-icon">&#128279;</div><h3>Paste your link</h3><p>Copy a YouTube video or Shorts URL and paste it above.</p></article>
+        <article class="step-card"><div class="step-icon">&#9881;</div><h3>Choose a format</h3><p>Pick video or audio, then choose the quality you need.</p></article>
+        <article class="step-card"><div class="step-icon">&#8595;</div><h3>Download</h3><p>Hit download and save it instantly to your device.</p></article>
+      </div>
+    </section>
+
+    <section class="section speed-section" aria-labelledby="speed-title">
+      <div class="speed-inner"><div class="speed-copy"><h2 id="speed-title">Built for speed and simplicity</h2><p>No ads. No popups. No confusing steps. Just clean, reliable downloads.</p><ul><li>Fast processing</li><li>High-quality formats</li><li>Works on mobile</li><li>No registration required</li></ul></div><div class="speed-art" aria-hidden="true"><div class="speed-panel"><div class="panel-top"><b>Available formats</b><span>04</span></div><div><span>Video</span><b>MP4</b></div><hr /><div><span>Audio</span><b>MP3</b></div><hr /></div></div></div>
+    </section>
+
+    <section class="section seo-content" aria-labelledby="seo-title">
+      <div class="seo-content-inner">
+        <p class="section-kicker">A clear, practical tool</p>
+        <h2 id="seo-title">A YouTube Video Extractor built for straightforward choices</h2>
+        <p>When you are looking for a YouTube video extractor, the useful part should be simple: paste a link, see the available options, and choose the format that fits your own content or permitted use. YouTube Video Extractor is designed as a clean online workspace for that job. There is no account flow to get in the way, no crowded dashboard, and no mystery around what the tool is asking for. A YouTube video extractor tool should make the next step obvious, whether your link is a standard video URL or a YouTube Shorts URL.</p>
+        <p>Our free YouTube video extractor experience starts with the link you already have. Copy the URL from YouTube, paste it into the field above, and let the tool identify the media options associated with that page. This keeps the workflow quick on desktop and just as comfortable on a phone. If you need a YouTube video extractor online while traveling, working from a shared computer, or managing a small creative project, a browser-based tool is often the easiest place to start.</p>
+
+        <h3>Choose the format and quality that make sense</h3>
+        <p>Different projects need different outputs. A YouTube video downloader can be useful when you need an MP4 file for material you own, have licensed, or are otherwise permitted to save. For presentations and modern displays, a YouTube video downloader 1080p option may be the practical balance between clarity and file size. When a higher-resolution source is available, a YouTube video downloader 4K option can help preserve more detail for large screens, editing workflows, or archival copies of your own work.</p>
+        <p>Sometimes sound is the real priority. A YouTube video downloader MP3 option is intended for situations where an audio-only format is appropriate, such as a recording you created, a licensed track, or a project where the rights holder has allowed an audio download. The interface presents format choices in plain language so you can distinguish video from audio before continuing. That simple distinction saves time and helps avoid downloading a larger file than your task requires.</p>
+
+        <h3>Why a simple online extractor is useful</h3>
+        <p>The best YouTube video downloader for a particular task is not necessarily the one with the most switches and banners. It is the one that tells you what it can do, works reliably in a browser, and makes quality choices understandable. This page is deliberately focused on those basics. A free YouTube video downloader should feel predictable: paste a valid link, review available formats, and select the option that fits the device and purpose you have in mind.</p>
+        <p>Because the experience is browser-first, you do not need to install a separate application for the basic workflow. That is useful for mobile users who want a YouTube video extractor from link without moving between several tools. It also makes the process easier to explain to a teammate: the link is the starting point, the format is the decision, and the download is the final step when it is available and authorized. No registration is required just to understand the available options.</p>
+
+        <h3>Use media responsibly</h3>
+        <p>Convenience should not obscure permissions. Only save or convert videos when you own the content, have the copyright holder's permission, or have another valid right to do so. Always respect YouTube's terms of service, applicable copyright law, and any creator restrictions. This is especially important when a video contains music, film clips, sports footage, or other material that may be protected even if it is easy to view online. A responsible YouTube video extractor tool is one used for personal projects, licensed media, and content you are entitled to keep.</p>
+        <p>For creators, keeping a local copy of an original upload can be a helpful part of a backup routine. For educators and teams, a permitted file can support offline playback in a planned setting. For everyone else, choosing the official download or sharing method provided by the rights holder is often the right answer. The goal is not to make a complicated process look complicated; it is to give you a clear format-selection tool while leaving ownership and permission where they belong.</p>
+
+        <h3>Start with a link</h3>
+        <p>Ready to check a video or Shorts URL? Paste it into the extractor at the top of this page. You will be guided toward the relevant format and quality options without an account, a software install, or unnecessary steps. Whether you searched for a YouTube video extractor free, a YouTube video extractor online, a YouTube video downloader 1080p, or a YouTube video downloader MP3 option, the workflow remains the same: use a link you are allowed to process, choose a suitable format, and keep the experience simple.</p>
+      </div>
+    </section>
+
+    <section class="section faq" id="faq" aria-labelledby="faq-title">
+      <div class="section-heading"><h2 id="faq-title">Frequently asked questions</h2></div>
+      <div class="faq-list">{faqs.map(([question, answer], index) => <article class:list={['faq-item', { 'is-open': index === 0 }]}><button class="faq-question" type="button" data-faq-button aria-expanded={index === 0 ? 'true' : 'false'}><span>{question}</span><span aria-hidden="true">⌄</span></button><div class="faq-answer"><p>{answer}</p></div></article>)}</div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><a class="brand footer-brand" href="#home"><span class="brand-mark"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8.5 6.7v10.6L17 12 8.5 6.7Z" /></svg></span><span>YouTube Video Extractor</span></a><p>Simple tools for media you love.</p><nav><a href="#privacy">Privacy</a><a href="#terms">Terms</a><a href="mailto:hello@youtubevideoextractor.com">Contact</a></nav><nav class="language-picker" aria-label="Language selector"><a href="/" aria-current="page">English</a><a href="/es/">Español</a><a href="/ja/">日本語</a><a href="/fr/">Français</a><a href="/de/">Deutsch</a><a href="/pt/">Português</a><a href="/ko/">한국어</a><a href="/it/">Italiano</a></nav><small>&copy; 2025 youtubevideoextractor.com</small></footer>
+</Layout>
+
+<script type="application/ld+json" is:inline>
+  {JSON.stringify({
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebSite',
+        name: 'YouTube Video Extractor',
+        url: 'https://youtubevideoextractor.com/',
+        description: 'A simple online tool for checking available media formats from permitted YouTube video and Shorts links.',
+      },
+      {
+        '@type': 'WebApplication',
+        name: 'YouTube Video Extractor',
+        applicationCategory: 'MultimediaApplication',
+        operatingSystem: 'Any',
+        url: 'https://youtubevideoextractor.com/',
+        description: 'A browser-based tool for finding media format options from permitted YouTube video and Shorts links.',
+      },
+    ],
+  })}
+</script>
+
+<script type="application/ld+json" is:inline>
+  {JSON.stringify(faqSchema)}
+</script>
+
+<script>
+  const input = document.querySelector('[data-url-input]');
+  const result = document.querySelector('[data-extract-result]');
+  
+  const focusExtractor = () => { 
+    document.querySelector('.extractor-card').scrollIntoView({ behavior: 'smooth', block: 'center' }); 
+    setTimeout(() => (input as HTMLInputElement)?.focus(), 350); 
+  };
+  
+  document.querySelectorAll('[data-paste-link]').forEach((button) => button.addEventListener('click', focusExtractor));
+  
+  const menu = document.querySelector('[data-mobile-menu]');
+  const toggle = document.querySelector('[data-menu-toggle]');
+  toggle?.addEventListener('click', () => { 
+    const open = menu.classList.toggle('is-open'); 
+    toggle.setAttribute('aria-expanded', String(open)); 
+  });
+  
+  document.querySelectorAll('.mobile-menu a').forEach((link) => link.addEventListener('click', () => menu.classList.remove('is-open')));
+
+  function extractVideoId(urlStr) {
+    const match = urlStr.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([\w-]{11})/);
+    return match ? match[1] : null;
+  }
+
+  function renderLoading(msg = 'Fetching video details and preparing direct server download...') {
+    if (!result) return;
+    result.className = 'extract-result is-visible';
+    result.innerHTML = `
+      <div class="extract-loading">
+        <div class="spinner"></div>
+        <span>${msg}</span>
+      </div>
+    `;
+  }
+
+  function renderError(msg) {
+    if (!result) return;
+    result.className = 'extract-result is-visible is-error';
+    result.innerHTML = `<div><strong>Unable to process link:</strong> ${msg}</div>`;
+  }
+
+  async function resolveStreams(videoId) {
+    const instances = [
+      'https://invidious.f5.si',
+      'https://invidious.nerqv.ai',
+      'https://vid.puffyan.us',
+      'https://invidious.privacydev.net'
+    ];
+
+    for (const baseUrl of instances) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 4000);
+        const res = await fetch(`${baseUrl}/api/v1/videos/${videoId}`, { signal: controller.signal });
+        clearTimeout(timeoutId);
+        if (res.ok) {
+          const data = await res.json();
+          if (data && (data.formatStreams?.length || data.adaptiveFormats?.length)) {
+            return data;
+          }
+        }
+      } catch (e) {
+        // continue
+      }
+    }
+    return null;
+  }
+
+  function renderSuccess(videoId, data) {
+    if (!result) return;
+    const title = data?.title || 'YouTube Video';
+    const author = data?.author || 'YouTube Creator';
+    const thumbUrl = data?.videoThumbnails?.find(t => t.quality === 'high')?.url || `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
+    const watchUrl = `https://www.youtube.com/watch?v=${videoId}`;
+    const cleanTitle = title.replace(/[^\w\s-]/gi, '').replace(/\s+/g, '_');
+
+    const videoStreams = [];
+    if (data?.formatStreams) {
+      data.formatStreams.forEach(s => {
+        if (s.url) videoStreams.push({ quality: s.qualityLabel || '720p', ext: s.container || 'mp4', url: s.url });
+      });
+    }
+    if (data?.adaptiveFormats) {
+      data.adaptiveFormats.forEach(s => {
+        if (s.url && s.type?.includes('video/mp4') && s.qualityLabel) {
+          if (!videoStreams.some(v => v.quality === s.qualityLabel)) {
+            videoStreams.push({ quality: s.qualityLabel, ext: 'mp4', url: s.url });
+          }
+        }
+      });
+    }
+
+    if (videoStreams.length === 0) {
+      videoStreams.push(
+        { quality: '1080p Full HD', ext: 'mp4', url: '' },
+        { quality: '720p HD', ext: 'mp4', url: '' },
+        { quality: '480p SD', ext: 'mp4', url: '' },
+        { quality: '360p Mobile', ext: 'mp4', url: '' }
+      );
+    }
+
+    const audioStreams = [];
+    if (data?.adaptiveFormats) {
+      data.adaptiveFormats.forEach(s => {
+        if (s.url && s.type?.includes('audio')) {
+          const bit = s.bitrate ? Math.round(s.bitrate / 1000) + ' kbps' : 'Audio Track';
+          if (!audioStreams.some(a => a.quality === bit)) {
+            audioStreams.push({ quality: bit, ext: s.container || 'm4a', url: s.url });
+          }
+        }
+      });
+    }
+
+    if (audioStreams.length === 0) {
+      audioStreams.push(
+        { quality: '320 kbps High Quality', ext: 'mp3', url: '' },
+        { quality: '128 kbps Standard', ext: 'mp3', url: '' }
+      );
+    }
+
+    result.className = 'extract-result is-visible';
+    result.innerHTML = `
+      <div class="result-header">
+        <img class="result-thumb" src="${thumbUrl}" alt="${title}" />
+        <div class="result-info">
+          <h3 class="result-title">${title}</h3>
+          <p class="result-author">By ${author}</p>
+        </div>
+      </div>
+
+      <div class="format-heading">
+        <span>🎬 Video Downloads (MP4)</span>
+        <small style="color: #10b981; font-weight: 700;">⚡ 100% Direct Server Stream</small>
+      </div>
+      <div class="formats-grid">
+        ${videoStreams.slice(0, 4).map((f) => `
+          <div class="format-card">
+            <div class="format-meta">
+              <span class="format-quality">${f.quality}</span>
+              <span class="format-type">${f.ext.toUpperCase()} Video</span>
+            </div>
+            <a href="/api/download?url=${encodeURIComponent(watchUrl)}&format=mp4&quality=${encodeURIComponent(f.quality)}" download="${cleanTitle}_${f.quality}.${f.ext}" class="format-download-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download MP4
+            </a>
+          </div>
+        `).join('')}
+      </div>
+
+      <div class="format-heading">
+        <span>🎧 Audio Downloads (MP3)</span>
+        <small style="color: #10b981; font-weight: 700;">⚡ 100% Direct Server Stream</small>
+      </div>
+      <div class="formats-grid">
+        ${audioStreams.slice(0, 2).map((f) => `
+          <div class="format-card">
+            <div class="format-meta">
+              <span class="format-quality">${f.quality}</span>
+              <span class="format-type">MP3 Audio</span>
+            </div>
+            <a href="/api/download?url=${encodeURIComponent(watchUrl)}&format=mp3" download="${cleanTitle}_audio.mp3" class="format-download-btn audio">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+              Download MP3
+            </a>
+          </div>
+        `).join('')}
+      </div>
+
+      <div class="result-actions">
+        <button type="button" class="action-btn" id="toggle-embed-btn">▶ Play In-Browser</button>
+      </div>
+
+      <div id="embed-container" style="display:none; margin-top:14px;">
+        <iframe width="100%" height="315" src="https://www.youtube.com/embed/${videoId}?autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius:10px; width:100%;"></iframe>
+      </div>
+    `;
+
+    document.getElementById('toggle-embed-btn')?.addEventListener('click', () => {
+      const container = document.getElementById('embed-container');
+      if (container) {
+        container.style.display = container.style.display === 'none' ? 'block' : 'none';
+      }
+    });
+  }
+
+  document.querySelector('[data-extractor-form]')?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const value = input ? (input as HTMLInputElement).value.trim() : '';
+    if (!value) {
+      renderError('Please paste a YouTube video or Shorts URL to extract.');
+      (input as HTMLInputElement)?.focus();
+      return;
+    }
+
+    const videoId = extractVideoId(value);
+    if (!videoId) {
+      renderError('Invalid URL format. Please paste a valid YouTube video or Shorts link (e.g., https://www.youtube.com/watch?v=...).');
+      return;
+    }
+
+    renderLoading('Extracting video info and preparing direct download endpoint...');
+
+    try {
+      const data = await resolveStreams(videoId);
+      renderSuccess(videoId, data);
+    } catch (err) {
+      renderSuccess(videoId, null);
+    }
+  });
+
+  document.querySelectorAll('[data-faq-button]').forEach((button) => button.addEventListener('click', () => { 
+    const item = button.closest('.faq-item'); 
+    const open = !item?.classList.contains('is-open'); 
+    document.querySelectorAll('.faq-item').forEach((faq) => { 
+      faq.classList.remove('is-open'); 
+      faq.querySelector('button')?.setAttribute('aria-expanded', 'false'); 
+    }); 
+    if (open) { 
+      item?.classList.add('is-open'); 
+      button.setAttribute('aria-expanded', 'true'); 
+    } 
+  }));
+</script>

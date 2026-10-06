@@ -1,0 +1,52 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  canonical?: string;
+  ogImage?: string;
+  lang?: string;
+}
+
+const {
+  title,
+  description = 'Fast, simple YouTube video and Shorts format extraction.',
+  canonical = 'https://youtubevideoextractor.com/',
+  ogImage = 'https://youtubevideoextractor.com/og-image.svg',
+  lang = 'en',
+} = Astro.props;
+
+const locales = [
+  ['en', 'English', ''], ['es', 'Español', '/es/'], ['ja', '日本語', '/ja/'], ['fr', 'Français', '/fr/'],
+  ['de', 'Deutsch', '/de/'], ['pt', 'Português', '/pt/'], ['ko', '한국어', '/ko/'], ['it', 'Italiano', '/it/'],
+];
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#4f8cff" />
+    <link rel="canonical" href={canonical} />
+    {locales.map(([code, _label, path]) => <link rel="alternate" hreflang={code} href={`https://youtubevideoextractor.com${path}`} />)}
+    <link rel="alternate" hreflang="x-default" href="https://youtubevideoextractor.com/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="YouTube Video Extractor" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="YouTube Video Extractor - fast, simple format extraction" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <title>{title}</title>
+  </head>
+  <body><slot /></body>
+</html>

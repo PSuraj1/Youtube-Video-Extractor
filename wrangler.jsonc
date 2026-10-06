@@ -1,0 +1,20 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "youtube-video-extractor",
+  "compatibility_date": "2026-09-30",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "main": "./dist/server/entry.mjs",
+  "assets": {
+    "directory": "./dist/client",
+    "binding": "ASSETS"
+  },
+  "routes": [
+    {
+      "pattern": "youtubevideoextractor.com",
+      "custom_domain": true,
+      "zone_name": "youtubevideoextractor.com"
+    }
+  ]
+}

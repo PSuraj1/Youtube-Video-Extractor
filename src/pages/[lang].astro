@@ -1,0 +1,159 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { locales, type Locale } from '../i18n';
+
+export function getStaticPaths() {
+  return Object.keys(locales).map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Locale;
+const t = locales[lang];
+if (!t) return Astro.redirect('/');
+const canonical = `https://youtubevideoextractor.com/${lang}/`;
+const languageLinks = [['en', 'English', '/'], ...Object.entries(locales).map(([code, item]) => [code, item.label, `/${code}/`])];
+---
+
+<Layout title={t.title} description={t.description} canonical={canonical} lang={lang}>
+  <header class="site-header"><div class="header-inner"><a class="brand" href={`/${lang}/`}><span class="brand-mark"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8.5 6.7v10.6L17 12 8.5 6.7Z" /></svg></span><span>YouTube Video Extractor</span></a><nav class="desktop-nav"><a href={`/${lang}/#how-it-works`}>{t.how}</a><a href={`/${lang}/#faq`}>{t.faq}</a></nav></div></header>
+  <main><section class="hero"><div class="hero-inner"><p class="eyebrow">Fast &amp; Free</p><h1>{t.hero}</h1><p class="hero-copy">{t.intro}</p><div class="extractor-card"><form class="extractor-form" data-extractor-form><label class="url-field"><span class="sr-only">YouTube URL</span><input data-url-input type="url" placeholder={t.paste} /></label><button class="extract-button" type="submit">{t.extract}</button></form><div class="extract-result" data-extract-result aria-live="polite"></div></div><p class="privacy-note">{t.privacy}</p></div></section>
+  <section class="section" id="how-it-works"><div class="section-heading"><h2>{t.how}</h2><p>{t.howText}</p></div><div class="steps-grid"><article class="step-card"><div class="step-icon">1</div><h3>{t.paste}</h3><p>{t.intro}</p></article><article class="step-card"><div class="step-icon">2</div><h3>MP4 / MP3</h3><p>{t.description}</p></article><article class="step-card"><div class="step-icon">3</div><h3>{t.extract}</h3><p>{t.privacy}</p></article></div></section>
+  <section class="section faq" id="faq"><div class="section-heading"><h2>{t.faq}</h2></div><div class="faq-list"><article class="faq-item is-open"><div class="faq-question"><span>{t.question}</span></div><div class="faq-answer"><p>{t.answer}</p></div></article></div></section></main>
+  <footer class="site-footer"><p>YouTube Video Extractor</p><nav class="language-picker" aria-label="Language selector">{languageLinks.map(([code, label, path]) => <a href={path} aria-current={code === lang ? 'page' : undefined}>{label}</a>)}</nav><small>&copy; 2025 youtubevideoextractor.com</small></footer>
+</Layout>
+
+<script>
+  const input = document.querySelector('[data-url-input]');
+  const result = document.querySelector('[data-extract-result]');
+
+  function extractVideoId(urlStr) {
+    const match = urlStr.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([\w-]{11})/);
+    return match ? match[1] : null;
+  }
+
+  function renderLoading(msg = 'Fetching streams...') {
+    if (!result) return;
+    result.className = 'extract-result is-visible';
+    result.innerHTML = `<div class="extract-loading"><div class="spinner"></div><span>${msg}</span></div>`;
+  }
+
+  function renderError(msg) {
+    if (!result) return;
+    result.className = 'extract-result is-visible is-error';
+    result.innerHTML = `<div><strong>Error:</strong> ${msg}</div>`;
+  }
+
+  async function resolveStreams(videoId) {
+    const instances = ['https://invidious.f5.si', 'https://invidious.nerqv.ai', 'https://vid.puffyan.us'];
+    for (const baseUrl of instances) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 4000);
+        const res = await fetch(`${baseUrl}/api/v1/videos/${videoId}`, { signal: controller.signal });
+        clearTimeout(timeoutId);
+        if (res.ok) {
+          const data = await res.json();
+          if (data && (data.formatStreams?.length || data.adaptiveFormats?.length)) return data;
+        }
+      } catch {}
+    }
+    return null;
+  }
+
+  function downloadDirect(btn, streamUrl, fileName) {
+    const originalText = btn.innerHTML;
+    btn.style.pointerEvents = 'none';
+    btn.innerHTML = `<span class="spinner" style="width:12px;height:12px;border-width:2px;display:inline-block;margin-right:4px;"></span> Downloading...`;
+    try {
+      const a = document.createElement('a');
+      a.href = streamUrl;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      btn.innerHTML = `✓ Started`;
+    } catch {
+      window.location.href = streamUrl;
+    } finally {
+      setTimeout(() => { btn.style.pointerEvents = 'auto'; btn.innerHTML = originalText; }, 4000);
+    }
+  }
+
+  function renderSuccess(videoId, data) {
+    if (!result) return;
+    const title = data?.title || 'YouTube Video';
+    const author = data?.author || 'YouTube Creator';
+    const thumbUrl = data?.videoThumbnails?.find((t) => t.quality === 'high')?.url || `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
+    const cleanTitle = title.replace(/[^\w\s-]/gi, '').replace(/\s+/g, '_');
+
+    const videoStreams = [];
+    if (data?.formatStreams) {
+      data.formatStreams.forEach((s) => { if (s.url) videoStreams.push({ quality: s.qualityLabel || '720p', ext: s.container || 'mp4', url: s.url }); });
+    }
+    if (videoStreams.length === 0) {
+      videoStreams.push({ quality: '720p HD', ext: 'mp4', url: `https://invidious.f5.si/latest_version?id=${videoId}&itag=22` });
+    }
+
+    const audioStreams = [];
+    if (data?.adaptiveFormats) {
+      data.adaptiveFormats.forEach((s) => {
+        if (s.url && s.type?.includes('audio')) {
+          audioStreams.push({ quality: 'Audio', ext: s.container || 'm4a', url: s.url });
+        }
+      });
+    }
+    if (audioStreams.length === 0) {
+      audioStreams.push({ quality: 'Audio Track', ext: 'm4a', url: `https://invidious.f5.si/latest_version?id=${videoId}&itag=140` });
+    }
+
+    result.className = 'extract-result is-visible';
+    result.innerHTML = `
+      <div class="result-header">
+        <img class="result-thumb" src="${thumbUrl}" alt="${title}" />
+        <div class="result-info"><h3 class="result-title">${title}</h3><p class="result-author">By ${author}</p></div>
+      </div>
+      <div class="format-heading"><span>🎬 MP4 Video</span></div>
+      <div class="formats-grid">
+        ${videoStreams.slice(0, 3).map((f) => `
+          <div class="format-card"><div class="format-meta"><span class="format-quality">${f.quality}</span><span class="format-type">${f.ext.toUpperCase()}</span></div><button type="button" class="format-download-btn direct-dl-btn" data-url="${encodeURIComponent(f.url)}" data-filename="${cleanTitle}_${f.quality}.${f.ext}">Download</button></div>
+        `).join('')}
+      </div>
+      <div class="format-heading"><span>🎧 Audio</span></div>
+      <div class="formats-grid">
+        ${audioStreams.slice(0, 2).map((f) => `
+          <div class="format-card"><div class="format-meta"><span class="format-quality">${f.quality}</span><span class="format-type">${f.ext.toUpperCase()}</span></div><button type="button" class="format-download-btn audio direct-dl-btn" data-url="${encodeURIComponent(f.url)}" data-filename="${cleanTitle}_audio.${f.ext}">Download Audio</button></div>
+        `).join('')}
+      </div>
+      <div class="result-actions"><button type="button" class="action-btn" id="toggle-embed-btn">▶ Play In-Browser</button></div>
+      <div id="embed-container" style="display:none; margin-top:14px;"><iframe width="100%" height="315" src="https://www.youtube.com/embed/${videoId}?autoplay=1" frameborder="0" allowfullscreen style="border-radius:10px; width:100%;"></iframe></div>
+    `;
+
+    result.querySelectorAll('.direct-dl-btn').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        const targetBtn = e.currentTarget as HTMLButtonElement;
+        downloadDirect(targetBtn, decodeURIComponent(targetBtn.dataset.url || ''), targetBtn.dataset.filename || 'video.mp4');
+      });
+    });
+
+    document.getElementById('toggle-embed-btn')?.addEventListener('click', () => {
+      const container = document.getElementById('embed-container');
+      if (container) container.style.display = container.style.display === 'none' ? 'block' : 'none';
+    });
+  }
+
+  document.querySelector('[data-extractor-form]')?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const value = input ? (input as HTMLInputElement).value.trim() : '';
+    if (!value) { renderError('Please paste a YouTube URL.'); return; }
+    const videoId = extractVideoId(value);
+    if (!videoId) { renderError('Invalid URL format.'); return; }
+    renderLoading('Extracting...');
+    try {
+      const data = await resolveStreams(videoId);
+      renderSuccess(videoId, data);
+    } catch {
+      renderSuccess(videoId, null);
+    }
+  });
+</script>
+
+

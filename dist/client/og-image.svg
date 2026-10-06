@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">YouTube Video Extractor</title>
+  <desc id="desc">Fast and simple online video format extraction</desc>
+  <rect width="1200" height="630" fill="#f6f9ff"/>
+  <circle cx="1060" cy="80" r="220" fill="#dceaff"/>
+  <circle cx="120" cy="590" r="250" fill="#ece4ff"/>
+  <rect x="100" y="111" width="1000" height="408" rx="28" fill="#ffffff" stroke="#dbe5f3" stroke-width="3"/>
+  <rect x="100" y="111" width="1000" height="54" rx="28" fill="#f8faff"/>
+  <circle cx="142" cy="138" r="8" fill="#b9c9df"/><circle cx="168" cy="138" r="8" fill="#b9c9df"/><circle cx="194" cy="138" r="8" fill="#b9c9df"/>
+  <circle cx="204" cy="315" r="50" fill="#4f8cff"/>
+  <path d="M190 286v58l49-29-49-29Z" fill="#ffffff"/>
+  <text x="290" y="294" fill="#1b2946" font-family="Arial, sans-serif" font-size="58" font-weight="700">YouTube Video Extractor</text>
+  <text x="294" y="354" fill="#667795" font-family="Arial, sans-serif" font-size="28">Fast, simple format extraction from a link</text>
+  <rect x="294" y="398" width="410" height="62" rx="14" fill="#eef4ff"/>
+  <text x="322" y="438" fill="#3473e6" font-family="Arial, sans-serif" font-size="24" font-weight="700">MP4 1080p  •  MP3 320kbps</text>
+</svg>
